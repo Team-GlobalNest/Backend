@@ -1,6 +1,6 @@
-package com.globalnest.backend.api.property.entity;
+package com.globalnest.backend.domain.property.entity;
 
-import com.globalnest.backend.api.global.entity.BaseEntity;
+import com.globalnest.backend.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

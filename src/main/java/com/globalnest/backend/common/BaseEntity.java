@@ -1,4 +1,4 @@
-package com.globalnest.backend.api.global.entity;
+package com.globalnest.backend.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
