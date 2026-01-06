@@ -1,7 +1,7 @@
 package com.globalnest.backend.domain.member.repository;
 
-import com.globalnest.backend.domain.member.entity.Member;
+import com.globalnest.backend.domain.member.entity.Agents;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Agents, Long> {
 }

@@ -1,35 +1,43 @@
 package com.globalnest.backend.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ApiResponse<T> {
 
-    private final boolean success;
-    private final String message;
-    private final T data;
-    private final LocalDateTime timestamp;
+    private boolean success;
+    private T data;
+    private ErrorResponse error;
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(true, "요청이 성공적으로 처리되었습니다.", data, LocalDateTime.now());
+        return ApiResponse.<T>builder()
+                .success(true)
+                .data(data)
+                .build();
     }
 
-    public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(true, message, data, LocalDateTime.now());
+    public static <T> ApiResponse<T> error(String code, String message) {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .error(ErrorResponse.builder()
+                        .code(code)
+                        .message(message)
+                        .build())
+                .build();
     }
 
-    public static <T> ApiResponse<T> success() {
-        return new ApiResponse<>(true, "요청이 성공적으로 처리되었습니다.", null, LocalDateTime.now());
-    }
-
-    public static <T> ApiResponse<T> fail(String message) {
-        return new ApiResponse<>(false, message, null, LocalDateTime.now());
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ErrorResponse {
+        private String code;
+        private String message;
     }
 }
