@@ -1,3 +1,8 @@
 spring:
   application:
     name: Backend
+
+jwt:
+  secret: dGhpcy1pcy1hLXZlcnktc2VjdXJlLWtleS1mb3ItZ2xvYmFsbmVzdC1iYWNrZW5kLWNoYW5nZS1pbi1wcm9kdWN0aW9u
+  expiration: 1800000  # 1 hour in milliseconds
+  refresh-expiration: 1209600000  # 7 days in milliseconds

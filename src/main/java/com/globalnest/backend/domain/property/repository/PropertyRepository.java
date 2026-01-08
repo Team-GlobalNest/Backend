@@ -4,4 +4,6 @@ import com.globalnest.backend.domain.property.entity.Property;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
+
+    boolean existsByPropertyIdAndAgent_AgentId(Long propertyId, Long agentId);
 }

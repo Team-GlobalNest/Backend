@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class PropertyOptionList {
 
     @Id

@@ -1,4 +1,4 @@
-package com.globalnest.backend.domain.member.entity;
+package com.globalnest.backend.domain.user.entity;
 
 public enum VerificationStatus {
     PENDING,

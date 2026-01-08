@@ -1,8 +1,8 @@
 package com.globalnest.backend.domain.agentverification.entity;
 
 import com.globalnest.backend.common.BaseEntity;
-import com.globalnest.backend.domain.member.entity.Users;
-import com.globalnest.backend.domain.member.entity.VerificationStatus;
+import com.globalnest.backend.domain.user.entity.User;
+import com.globalnest.backend.domain.user.entity.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "agent_verification")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class AgentVerification extends BaseEntity {
@@ -25,7 +24,7 @@ public class AgentVerification extends BaseEntity {
     /** 신청자 */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
     /** 국가자격증(공인중개사) 번호 */
     @Column(nullable = false, length = 64)
@@ -41,9 +40,40 @@ public class AgentVerification extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VerificationStatus status;
+    @Builder.Default
+    private VerificationStatus status = VerificationStatus.PENDING;
+
+    /** 1차 자동 검증 통과 여부 */
+    @Builder.Default
+    private Boolean autoVerified = false;
 
     private LocalDateTime reviewedAt;
     private String reviewerNote;
+
+    /** 검토자 (ADMIN) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewer_id")
+    private User reviewer;
+
+    /** 승인 처리 (2차 수동 검증) */
+    public void approve(User admin, String note) {
+        this.status = VerificationStatus.VERIFIED;
+        this.reviewedAt = LocalDateTime.now();
+        this.reviewer = admin;
+        this.reviewerNote = note;
+    }
+
+    /** 거부 처리 (2차 수동 검증) */
+    public void reject(User admin, String note) {
+        this.status = VerificationStatus.REJECTED;
+        this.reviewedAt = LocalDateTime.now();
+        this.reviewer = admin;
+        this.reviewerNote = note;
+    }
+
+    /** 1차 자동 검증 통과 표시 */
+    public void setAutoVerified() {
+        this.autoVerified = true;
+    }
 
 }

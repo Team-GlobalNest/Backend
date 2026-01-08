@@ -1,4 +1,4 @@
-package com.globalnest.backend.domain.member.entity;
+package com.globalnest.backend.domain.user.entity;
 
 import com.globalnest.backend.common.BaseEntity;
 import jakarta.persistence.*;
@@ -26,7 +26,7 @@ public class Agents extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
     // 자격증 번호
     private String licenseNumber;

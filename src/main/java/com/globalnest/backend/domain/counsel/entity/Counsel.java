@@ -8,8 +8,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "Counsel")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Counsel {

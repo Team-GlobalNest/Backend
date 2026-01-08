@@ -1,6 +1,6 @@
 package com.globalnest.backend.domain.Inquiry.entity;
 
-import com.globalnest.backend.domain.member.entity.Users;
+import com.globalnest.backend.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,8 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "inquiry")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Inquiry {
@@ -21,7 +20,7 @@ public class Inquiry {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private User user;
 
     @Column(nullable = false, length = 255)
     private String title;
@@ -40,7 +39,7 @@ public class Inquiry {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "responded_by_admin_id")
-    private Users respondedByAdmin;
+    private User respondedByAdmin;
 
     @Column(columnDefinition = "TEXT")
     private String adminResponse;
