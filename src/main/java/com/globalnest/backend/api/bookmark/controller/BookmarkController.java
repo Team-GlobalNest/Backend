@@ -47,13 +47,4 @@ public class BookmarkController {
         bookmarkService.removeBookmark(propertyId, userId);
         return ApiResponse.success(null);
     }
-
-    @Operation(summary = "즐겨찾기 여부 확인", description = "특정 매물이 즐겨찾기에 있는지 확인합니다.")
-    @GetMapping("/{propertyId}/check")
-    @PreAuthorize("isAuthenticated()")
-    public ApiResponse<Boolean> checkBookmark(@PathVariable Long propertyId) {
-        Long userId = permissionChecker.getCurrentUserId();
-        boolean isBookmarked = bookmarkService.isBookmarked(propertyId, userId);
-        return ApiResponse.success(isBookmarked);
-    }
 }

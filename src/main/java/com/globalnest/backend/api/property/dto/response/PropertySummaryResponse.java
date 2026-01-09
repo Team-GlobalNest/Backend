@@ -2,6 +2,7 @@ package com.globalnest.backend.api.property.dto.response;
 
 import com.globalnest.backend.domain.property.entity.PropertyStatus;
 import com.globalnest.backend.domain.property.entity.PropertyType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +27,7 @@ public class PropertySummaryResponse {
     private Double roomSize;
     private Integer numRooms;
     private PropertyStatus status;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 }

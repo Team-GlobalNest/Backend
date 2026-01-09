@@ -1,8 +1,10 @@
 package com.globalnest.backend.domain.property.service;
 
 import com.globalnest.backend.api.property.dto.request.PropertyCreateRequest;
+import com.globalnest.backend.api.property.dto.request.PropertySearchRequest;
 import com.globalnest.backend.api.property.dto.request.PropertyStatusUpdateRequest;
 import com.globalnest.backend.api.property.dto.request.PropertyUpdateRequest;
+import com.globalnest.backend.api.property.dto.response.PropertyPageResponse;
 import com.globalnest.backend.api.property.dto.response.PropertyResponse;
 import com.globalnest.backend.api.property.dto.response.PropertySummaryResponse;
 import com.globalnest.backend.domain.user.entity.Agents;
@@ -11,9 +13,15 @@ import com.globalnest.backend.domain.property.entity.*;
 import com.globalnest.backend.domain.property.repository.OptionListRepository;
 import com.globalnest.backend.domain.property.repository.PropertyOptionListRepository;
 import com.globalnest.backend.domain.property.repository.PropertyRepository;
+import com.globalnest.backend.domain.property.repository.PropertySpecification;
 import com.globalnest.backend.global.exception.ForbiddenException;
 import com.globalnest.backend.global.exception.PropertyNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +81,40 @@ public class PropertyService {
                 .orElseThrow(() -> new PropertyNotFoundException("매물을 찾을 수 없습니다"));
 
         return convertToResponse(property);
+    }
+
+    public PropertyPageResponse searchProperties(PropertySearchRequest searchRequest) {
+        // 페이징 및 정렬 설정
+        Sort sort = Sort.by(
+                searchRequest.getSortDirection().equalsIgnoreCase("DESC")
+                    ? Sort.Direction.DESC
+                    : Sort.Direction.ASC,
+                searchRequest.getSortBy()
+        );
+
+        Pageable pageable = PageRequest.of(
+                searchRequest.getPage(),
+                searchRequest.getSize(),
+                sort
+        );
+
+        // Specification을 사용하여 동적 쿼리 실행
+        Specification<Property> spec = PropertySpecification.withFilters(searchRequest);
+        Page<Property> propertyPage = propertyRepository.findAll(spec, pageable);
+
+        // PropertySummaryResponse로 변환
+        List<PropertySummaryResponse> summaryResponses = propertyPage.getContent().stream()
+                .map(this::convertToSummaryResponse)
+                .collect(Collectors.toList());
+
+        return PropertyPageResponse.builder()
+                .properties(summaryResponses)
+                .currentPage(propertyPage.getNumber())
+                .pageSize(propertyPage.getSize())
+                .totalElements(propertyPage.getTotalElements())
+                .totalPages(propertyPage.getTotalPages())
+                .isLast(propertyPage.isLast())
+                .build();
     }
 
     public List<PropertySummaryResponse> getMyProperties(Long agentId) {

@@ -72,6 +72,42 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 사용자를 찾을 수 없음
+     */
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error("USER_NOT_FOUND", ex.getMessage()));
+    }
+
+    /**
+     * 이미 중개사인 사용자
+     */
+    @ExceptionHandler(AlreadyAgentException.class)
+    public ResponseEntity<ApiResponse<?>> handleAlreadyAgent(AlreadyAgentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error("ALREADY_AGENT", ex.getMessage()));
+    }
+
+    /**
+     * 중복된 인증 신청
+     */
+    @ExceptionHandler(DuplicateVerificationException.class)
+    public ResponseEntity<ApiResponse<?>> handleDuplicateVerification(DuplicateVerificationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error("DUPLICATE_VERIFICATION", ex.getMessage()));
+    }
+
+    /**
+     * 인증을 찾을 수 없음
+     */
+    @ExceptionHandler(VerificationNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleVerificationNotFound(VerificationNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error("VERIFICATION_NOT_FOUND", ex.getMessage()));
+    }
+
+    /**
      * 기타 예외 처리
      */
     @ExceptionHandler(Exception.class)

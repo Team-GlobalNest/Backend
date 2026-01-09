@@ -49,7 +49,7 @@ public class AuthController {
     @Operation(summary = "로그아웃", description = "로그아웃 처리를 합니다.")
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
-    public ApiResponse<AuthDto.LogoutResponse> logout(
+    public ApiResponse<LoginResponse> logout(
             @AuthenticationPrincipal User user,
             HttpServletResponse response) {
         authService.logout(user.getId());
@@ -57,6 +57,6 @@ public class AuthController {
         // Refresh Token 쿠키 삭제
         deleteRefreshTokenCookie(response);
 
-        return ApiResponse.success(AuthDto.LogoutResponse.success());
+        return ApiResponse.success(LoginResponse.success());
     }
 }

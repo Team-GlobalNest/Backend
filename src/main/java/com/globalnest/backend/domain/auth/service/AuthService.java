@@ -8,7 +8,7 @@ import com.globalnest.backend.domain.user.entity.User;
 import com.globalnest.backend.domain.user.repository.UserRepository;
 import com.globalnest.backend.global.exception.UnauthorizedException;
 import com.globalnest.backend.global.security.CustomUserDetails;
-import com.globalnest.backend.global.security.jwt.JwtUtil;
+import com.globalnest.backend.global.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     public LoginResponse login(LoginRequest request) {
         // Authenticate

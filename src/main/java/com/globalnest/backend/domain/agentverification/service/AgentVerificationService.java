@@ -12,6 +12,7 @@ import com.globalnest.backend.domain.user.entity.User;
 import com.globalnest.backend.domain.user.entity.VerificationStatus;
 import com.globalnest.backend.domain.user.repository.AgentRepository;
 import com.globalnest.backend.domain.user.repository.UserRepository;
+import com.globalnest.backend.global.exception.AlreadyAgentException;
 import com.globalnest.backend.global.exception.DuplicateVerificationException;
 import com.globalnest.backend.global.exception.UserNotFoundException;
 import com.globalnest.backend.global.exception.VerificationNotFoundException;
@@ -37,6 +38,11 @@ public class AgentVerificationService {
     public AgentVerificationResponse submitVerification(AgentVerificationRequest request, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Check if user is already an agent
+        if (user.getRole() == Role.AGENT) {
+            throw new AlreadyAgentException("User is already an agent");
+        }
 
         // Check if already has pending verification
         Optional<AgentVerification> existing = verificationRepository.findTopByUser_UserIdOrderByCreatedAtDesc(userId);
